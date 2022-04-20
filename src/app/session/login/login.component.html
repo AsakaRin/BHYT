@@ -1,0 +1,53 @@
+<div id="login_box">
+
+  <div class="content">
+
+    <mat-card class="card_content">
+      <mat-card-title><div class="width_100_percent text_align_center">BHYT</div></mat-card-title>
+      <mat-card-subtitle><div class="width_100_percent text_align_center">Welcome, Sign in to continue</div></mat-card-subtitle>
+      <mat-card-content>
+        <form [formGroup]="loginForm">
+          <div fxLayout="row wrap" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="username" required placeholder="example@gmail.com" type="text" autofocus autocomplete="off">
+              <span matSuffix><i class="material-icons">email</i></span>
+              <mat-error *ngIf="loginForm.controls['username'].touched && loginForm.controls['username'].hasError('required')">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="loginForm.controls['username'].touched && loginForm.controls['username'].hasError('email')">
+                Email is invalid
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" required placeholder="Password" type="password">
+              <span matSuffix><i class="material-icons">vpn_key</i></span>
+              <mat-error *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].hasError('required')">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].hasError('minlength')">
+                Password length must than 8
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="end center">
+            <span class="color_link cursor_pointer">Forgot Password</span>
+          </div>
+        </form>
+      </mat-card-content>
+      <mat-card-actions class="text_align_center">
+        <button mat-raised-button color="primary" type="submit"
+                [disabled]="!loginForm.valid" (click)="loginExecute()">Sign In</button>
+      </mat-card-actions>
+      <mat-divider inset></mat-divider>
+      <mat-card-footer>
+        <div class="width_100_percent text_align_center">Don't have a account? <span class="color_link cursor_pointer" (click)="switchRegister()">Sign up</span> now</div>
+      </mat-card-footer>
+    </mat-card>
+
+  </div>
+
+</div>

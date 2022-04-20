@@ -1,0 +1,50 @@
+<div id="register_box">
+
+  <div class="content">
+
+    <mat-card class="card_content">
+      <mat-card-title><div class="width_100_percent text_align_center">BHYT</div></mat-card-title>
+      <mat-card-subtitle><div class="width_100_percent text_align_center">Welcome, Sign up to continue</div></mat-card-subtitle>
+      <mat-card-content>
+        <form [formGroup]="registerForm">
+          <div fxLayout="row wrap" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput required formControlName="username" placeholder="example@gmail.com" type="text" autofocus autocomplete="off">
+              <span matSuffix><i class="material-icons">email</i></span>
+              <mat-error *ngIf="registerForm.controls['username'].touched && registerForm.controls['username'].hasError('required')">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="registerForm.controls['username'].touched && registerForm.controls['username'].hasError('email')">
+                Email is invalid
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input matInput required formControlName="password" placeholder="Password" type="password">
+              <span matSuffix><i class="material-icons">vpn_key</i></span>
+              <mat-error *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].hasError('required')">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].hasError('minlength')">
+                Password length must than 8
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </form>
+      </mat-card-content>
+      <mat-card-actions class="text_align_center">
+        <button mat-raised-button color="primary" type="submit"
+                [disabled]="!registerForm.valid" (click)="registerExecute()">Sign Up</button>
+      </mat-card-actions>
+      <mat-divider inset></mat-divider>
+      <mat-card-footer>
+        <div class="width_100_percent text_align_center">Already have a account? <span class="color_link cursor_pointer" (click)="switchLogin()">Sign in</span> now</div>
+      </mat-card-footer>
+    </mat-card>
+
+  </div>
+
+</div>

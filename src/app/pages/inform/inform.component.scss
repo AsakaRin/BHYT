@@ -1,0 +1,43 @@
+#inform_box {
+
+  background-image: url(../../../assets/background-index.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: max-content;
+  padding-bottom: 30px;
+
+  .content {
+
+    width: 100%;
+
+    mat-card {
+
+      width: 90%;
+    }
+
+    .table {
+      width: 100%;
+    }
+
+    .form {
+
+      mat-divider {
+        width: 100%;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .title_text {
+
+        font-size: 120%;
+        font-weight: 500;
+
+        span {
+          font-weight: normal;
+          font-size: 80%;
+        }
+      }
+    }
+  }
+}

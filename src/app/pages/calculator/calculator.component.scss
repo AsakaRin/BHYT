@@ -1,0 +1,193 @@
+#calculator_box {
+
+  height: max-content;
+  padding-bottom: 30px;
+  background-image: url(../../../assets/background-index.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-height: 100%;
+
+  .content {
+
+    width: 100%;
+
+    mat-card {
+
+      width: 90%;
+      th, td {
+
+        text-align: center;
+      }
+
+      ::ng-deep .mat-header-row {
+
+        background-color: #3f51b5;
+
+        th {
+          color: white;
+        }
+      }
+    }
+
+    .table {
+      padding-top: 50px;
+      padding-bottom: 20px;
+      width: 100%;
+    }
+  }
+}
+
+
+::ng-deep .inner-container {
+  padding-top: 0px;
+}
+
+label {
+  margin-top: 10px;
+}
+
+.disabled {
+  color: #4b4b4b;
+}
+
+.viewAction {
+  cursor: not-allowed;
+}
+
+.personDto {
+  border-radius: 15px;
+  background-color: #ebebeb;
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 20px;
+}
+
+.selected {
+  background-color: #eec9c7;
+}
+
+.unselected {
+  background-color: white;
+}
+
+.unchoosedPersons, .choosedPersons {
+
+  border-width: 1px;
+  border-style: double;
+  border-color: #e8e8e8;
+}
+
+.choosedPersons {
+  width: 45%;
+  float: right;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.unchoosedPersons {
+  width: 45%;
+  float: left;
+  margin: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.buttonMove {
+  width: 10%;
+  float: left;
+  height: 100%;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.buttonTop {
+  width: 100%;
+  margin-bottom: 10%;
+  color: green;
+  font-size: 25px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
+.buttonBottom {
+  width: 100%;
+  color: red;
+  font-size: 25px;
+  transform: rotate(180deg);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
+.containerPersons {
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.responsive-table {
+  li {
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  .table-row {
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+  }
+  .col-1 {
+    flex-basis: 10%;
+  }
+  .col-2 {
+    flex-basis: 40%;
+  }
+  .col-3 {
+    flex-basis: 25%;
+  }
+  .col-4 {
+    flex-basis: 25%;
+  }
+}
+
+::ng-deep .horizontal-app-menu.fixed-header .header {
+  z-index: 700;
+}
+
+.formBox {
+  max-width: 1000px;
+}
+
+.buttonBox {
+  min-width: 90px;
+}
+
+.form {
+  max-width: 1000px;
+}
+
+mat-form-field {
+  label {
+    width: 100%;
+  }
+}
+
+.padding-left-right-4-pc {
+  padding: 0 4%;
+}

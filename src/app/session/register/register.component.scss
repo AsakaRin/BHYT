@@ -1,0 +1,23 @@
+#register_box {
+
+  background: url(../../../assets/background-login.jpg) no-repeat center center fixed;
+  height: 100%;
+
+  .content {
+
+    padding-top: 100px;
+
+    .card_content {
+
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 30px 40px;
+
+      mat-form-field {
+
+        width: 100%;
+      }
+    }
+  }
+}
