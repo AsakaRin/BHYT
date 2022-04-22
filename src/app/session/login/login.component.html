@@ -4,47 +4,47 @@
 
     <mat-card class="card_content">
       <mat-card-title><div class="width_100_percent text_align_center">BHYT</div></mat-card-title>
-      <mat-card-subtitle><div class="width_100_percent text_align_center">Welcome, Sign in to continue</div></mat-card-subtitle>
+      <mat-card-subtitle><div class="width_100_percent text_align_center">Chào mừng, đăng nhập để tiếp tục</div></mat-card-subtitle>
       <mat-card-content>
         <form [formGroup]="loginForm">
           <div fxLayout="row wrap" fxLayoutAlign="center center">
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
-              <input matInput formControlName="username" required placeholder="example@gmail.com" type="text" autofocus autocomplete="off">
+              <input matInput formControlName="username" required placeholder="example@gmail.com" autofocus type="text" autofocus autocomplete="off">
               <span matSuffix><i class="material-icons">email</i></span>
               <mat-error *ngIf="loginForm.controls['username'].touched && loginForm.controls['username'].hasError('required')">
-                Email is required
+                Email là bắt buộc
               </mat-error>
               <mat-error *ngIf="loginForm.controls['username'].touched && loginForm.controls['username'].hasError('email')">
-                Email is invalid
+                Email không hợp lệ
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="center center">
             <mat-form-field appearance="outline">
-              <mat-label>Password</mat-label>
+              <mat-label>Mật khẩu</mat-label>
               <input matInput formControlName="password" required placeholder="Password" type="password">
               <span matSuffix><i class="material-icons">vpn_key</i></span>
               <mat-error *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].hasError('required')">
-                Password is required
+                Mật khẩu là bắt buộc
               </mat-error>
               <mat-error *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].hasError('minlength')">
-                Password length must than 8
+                Độ dài mật khẩu phải có ít nhất 8 ký tự
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="end center">
-            <span class="color_link cursor_pointer">Forgot Password</span>
+            <span class="color_link cursor_pointer" (click)="alert()">Quên mật khẩu</span>
           </div>
         </form>
       </mat-card-content>
       <mat-card-actions class="text_align_center">
         <button mat-raised-button color="primary" type="submit"
-                [disabled]="!loginForm.valid" (click)="loginExecute()">Sign In</button>
+                [disabled]="!loginForm.valid" (click)="loginExecute()">Đăng nhập</button>
       </mat-card-actions>
       <mat-divider inset></mat-divider>
       <mat-card-footer>
-        <div class="width_100_percent text_align_center">Don't have a account? <span class="color_link cursor_pointer" (click)="switchRegister()">Sign up</span> now</div>
+        <div class="width_100_percent text_align_center">Không có tài khoản? <span class="color_link cursor_pointer" (click)="switchRegister()">Đăng ký</span> ngay</div>
       </mat-card-footer>
     </mat-card>
 

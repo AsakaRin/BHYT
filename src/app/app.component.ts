@@ -14,6 +14,7 @@ export class AppComponent implements OnDestroy {
 
   private authSub: Subscription = new Subscription;
   private errorSub: Subscription = new Subscription;
+  private notifSub: Subscription = new Subscription;
 
   constructor(
     private sharedService: SharedService,
@@ -25,6 +26,10 @@ export class AppComponent implements OnDestroy {
     this.errorSub = this.sharedService.errorChange.subscribe(value => {
       this.openSnackBar(value);
     })
+    this.notifSub = this.sharedService.notificationChange.subscribe(value => {
+      this.openSnackBar(value);
+    })
+    this.authService.authentication();
   }
 
   ngOnDestroy(): void {

@@ -82,7 +82,7 @@
 
               <mat-form-field class="width_100_percent" appearance="outline">
                 <mat-label>Ngày sinh</mat-label>
-                <input matInput [matDatepicker]="dp3" [disabled]="true" required formControlName="birthday" [max]="maxDate">
+                <input matInput [matDatepicker]="dp3" [disabled]="true" required formControlName="birthday" [max]="maxDate" style="color: rgba(0, 0, 0, 0.87) !important;">
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
                 <mat-datepicker #dp3 disabled="false"></mat-datepicker>
@@ -182,7 +182,7 @@
             <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
               <mat-form-field class="width_100_percent" appearance="outline">
                 <mat-label>Thu nhập cá nhân (vnđ)</mat-label>
-                <input matInput required formControlName="salary" autocomplete="off">
+                <input matInput required formControlName="salary" autocomplete="off" (keypress)="onlyNumber($event)">
                 <mat-error *ngIf="informForm.controls['salary'].touched && informForm.controls['salary'].hasError('required')">
                   Thu nhập cá nhân
                 </mat-error>
@@ -196,6 +196,9 @@
               <mat-form-field class="width_100_percent" appearance="outline">
                 <mat-label>Mã hộ gia đình</mat-label>
                 <input matInput autocomplete="off" formControlName="familyCode" [required]="isRequired('familyCode')">
+                <mat-error *ngIf="informForm.controls['familyCode'].touched && informForm.controls['familyCode'].hasError('required')">
+                  Mã hộ gia đình là bắt buộc
+                </mat-error>
               </mat-form-field>
             </div>
             <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
@@ -217,6 +220,9 @@
               <mat-form-field class="width_100_percent" appearance="outline">
                 <mat-label>Điện thoại liên hệ</mat-label>
                 <input matInput autocomplete="off" formControlName="phoneContact" [required]="isRequired('phoneContact')">
+                <mat-error *ngIf="informForm.controls['phoneContact'].touched && informForm.controls['phoneContact'].hasError('required')">
+                  Điện thoại liên hệ là bắt buộc
+                </mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -225,12 +231,16 @@
               <mat-form-field class="width_100_percent" appearance="outline">
                 <mat-label>Địa chỉ theo sổ hộ khẩu (sổ tạm trú)</mat-label>
                 <input matInput autocomplete="off" formControlName="addressHousehold" [required]="isRequired('addressHousehold')">
+                <mat-error *ngIf="informForm.controls['addressHousehold'].touched && informForm.controls['familyCode'].hasError('addressHousehold')">
+                  Địa chỉ theo hộ khẩu là bắt buộc
+                </mat-error>
               </mat-form-field>
             </div>
           </div>
         </form>
         <div fxLayout="row wrap" fxLayoutAlign="end center" class="width_100_percent">
-          <button mat-flat-button color="primary" (click)="onSubmit()">Lưu</button>
+          <button mat-flat-button color="warn" (click)="onCancel()" style="margin-right: 10px; width: 80px">Quay lại</button>
+          <button mat-flat-button color="primary" (click)="onSubmit()" style="width: 80px">Lưu</button>
         </div>
       </mat-card-content>
     </mat-card>

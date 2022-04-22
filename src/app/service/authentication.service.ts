@@ -15,6 +15,7 @@ export class AuthService {
 
   private authSuccessfully(message: string) {
     this.isAuthenticated = true;
+    localStorage.setItem("isAuth", "authenticatedUser");
     this.authChange.next(message);
     this.router.navigate(['/pages/dashboard']);
   }
@@ -23,10 +24,10 @@ export class AuthService {
     this.afAuth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        this.authSuccessfully("Login Successfully");
+        this.authSuccessfully("Đăng nhập thành công");
       })
       .catch(error => {
-        this.sharedService.gettingError("Bad Credential");
+        this.sharedService.gettingError("Sai thông tin đăng nhập");
       })
   }
 
@@ -34,7 +35,7 @@ export class AuthService {
     this.afAuth
       .createUserWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        this.authSuccessfully("Register Successfully");
+        this.authSuccessfully("Đăng ký thành công");
       })
       .catch(error => {
         this.sharedService.gettingError(error.message);
@@ -42,12 +43,23 @@ export class AuthService {
   }
 
   public logout() {
-    this.isAuthenticated = false;
-    this.authChange.next("Logout Successfully");
+    this.removeSession();
+    this.authChange.next("Đăng xuất thành công");
     this.router.navigate(['/session/login']);
   }
 
   public isAuth() {
     return this.isAuthenticated;
+  }
+
+  public authentication() {
+    if (localStorage.getItem("isAuth")) {
+      this.isAuthenticated = true;
+    }
+  }
+
+  public removeSession() {
+    localStorage.removeItem("isAuth");
+    this.isAuthenticated = false;
   }
 }

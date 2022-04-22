@@ -18,8 +18,8 @@
                             <li class="table-row {{this.singleIsSelectedUnchoosed(i)}}"
                                 *ngFor="let person of singleMode.unchoosedPersons; index as i"
                                 (click)="selectUnchoosedPerson(i)">
-                                <div class="col col-5"><span >{{person.code}}</span></div>
                                 <div class="col col-5"><span >{{person.fullname}}</span></div>
+                                <div class="col col-5"><span >{{person.code}}</span></div>
                             </li>
                         </ul>
                     </div>
@@ -36,8 +36,8 @@
                         <ul class="responsive-table padding_right_40">
                             <li class="table-row {{this.singleIsSelectedChoosed(i)}}"
                                 *ngFor="let person of singleMode.choosedPersons; index as i" (click)="selectChoosedPerson(i)">
-                                <div class="col col-5"><span >{{person.code}}</span></div>
                                 <div class="col col-5"><span >{{person.fullname}}</span></div>
+                                <div class="col col-5"><span >{{person.code}}</span></div>
                             </li>
                         </ul>
                     </div>
@@ -94,8 +94,8 @@
                             <li class="table-row {{this.familyIsSelectedUnchoosed(i)}}"
                                 *ngFor="let family of familyMode.unchoosedFamilies; index as i"
                                 (click)="selectUnchoosedFamily(i)">
-                                <div class="col col-5"><span >{{family.code}}</span></div>
-                                <div class="col col-5"><span >{{family.fullname}}</span></div>
+                                <div class="col col-5"><span >Gia đình ông (bà): {{family.household}}</span></div>
+                                <div class="col col-5"><span >{{family.familyCode}}</span></div>
                             </li>
                         </ul>
                     </div>
@@ -112,35 +112,35 @@
                         <ul class="responsive-table padding_right_40">
                             <li class="table-row {{this.familyIsSelectedChoosed(i)}}"
                                 *ngFor="let family of familyMode.choosedFamilies; index as i" (click)="selectChoosedFamily(i)">
-                                <div class="col col-5"><span >{{family.code}}</span></div>
-                                <div class="col col-5"><span >{{family.fullname}}</span></div>
+                                <div class="col col-5"><span >Gia đình ông (bà): {{family.household}}</span></div>
+                                <div class="col col-5"><span >{{family.familyCode}}</span></div>
                             </li>
                         </ul>
                     </div>
                 </div>
               </div>
 
-              <div *ngIf="singleMode.resultList.length > 0" class="row">
-                <table mat-table [dataSource]="singleMode.resultList" class="table">
+              <div *ngIf="familyMode.resultList.length > 0" class="row">
+                <table mat-table [dataSource]="familyMode.resultList" class="table">
 
-                  <ng-container matColumnDef="fullname">
-                    <th mat-header-cell *matHeaderCellDef> Họ và tên </th>
-                    <td mat-cell *matCellDef="let element"> {{element.fullname}} </td>
+                  <ng-container matColumnDef="household">
+                    <th mat-header-cell *matHeaderCellDef> Chủ hộ gia đình </th>
+                    <td mat-cell *matCellDef="let element"> {{element.household}} </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="code">
-                    <th mat-header-cell *matHeaderCellDef> Số thẻ BHYT </th>
-                    <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+                  <ng-container matColumnDef="familyCode">
+                    <th mat-header-cell *matHeaderCellDef> Mã hộ gia đình </th>
+                    <td mat-cell *matCellDef="let element"> {{element.familyCode}} </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="cmnd">
-                    <th mat-header-cell *matHeaderCellDef> Số CMND/CCCD/Hộ chiếu </th>
-                    <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+                  <ng-container matColumnDef="baseSalary">
+                    <th mat-header-cell *matHeaderCellDef> Áp dụng mức lương cơ sở (vnđ) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.baseSalary}} </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="salary">
-                    <th mat-header-cell *matHeaderCellDef> Thu nhập cá nhân (vnđ) </th>
-                    <td mat-cell *matCellDef="let element"> {{element.salary}} </td>
+                  <ng-container matColumnDef="count">
+                    <th mat-header-cell *matHeaderCellDef> Số lượng thành viên đăng ký </th>
+                    <td mat-cell *matCellDef="let element"> {{element.count}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="cost">

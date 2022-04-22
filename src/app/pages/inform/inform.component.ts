@@ -1,3 +1,5 @@
+import { AuthService } from './../../service/authentication.service';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SharedService } from './../../shared/shared.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -463,10 +465,16 @@ export class InformComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private firestore: AngularFirestore,
-    private sharedServcie: SharedService
+    private sharedServcie: SharedService,
+    private router: Router,
+    private auth: AuthService
   ) { }
 
   ngOnInit(): void {
+
+    if (!this.auth.isAuth()) {
+      this.router.navigate(["/session/login"]);
+    }
 
     this.informForm = this.formBuilder.group({
       type: ['0', Validators.required],
@@ -475,7 +483,7 @@ export class InformComponent implements OnInit {
       fullname: ['', Validators.required],
       code: ['', Validators.required],
       cmnd: ['', Validators.required],
-      birthday: ['', Validators.required],
+      birthday: [new Date(), Validators.required],
       gender: ['0', Validators.required],
       nation: ['Vietnam', Validators.required],
       ethnicity: [''],
@@ -517,7 +525,14 @@ export class InformComponent implements OnInit {
 
   onSubmit() {
 
-    this.firestore.collection('inform').add(this.informForm.value);
+    this.firestore.collection('inform').add({ ...this.informForm.value, target: this.informForm.controls['target'].value }).then(res => {
+      this.router.navigate(['/pages/dashboard']);
+      this.sharedServcie.getNotification("Thêm thành công");
+    });
+  }
+
+  onCancel() {
+    this.router.navigate(['/pages/dashboard']);
   }
 
   onlyCapitalized(event: KeyboardEvent, control) {

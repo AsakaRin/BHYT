@@ -4,7 +4,8 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  height: 100%;
+  height: max-content;
+  min-height: 100%;
 
   .content {
 

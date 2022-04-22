@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.authService.removeSession();
+
     this.loginForm = this.formBuilder.group({
       username: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required, Validators.minLength(8)]]
@@ -40,6 +42,10 @@ export class LoginComponent implements OnInit {
 
   switchRegister() {
     this.router.navigate(['/session/register']);
+  }
+
+  alert() {
+    alert("Tính năng chưa phát triển");
   }
 
 }

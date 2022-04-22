@@ -1,5 +1,7 @@
+import { Router } from '@angular/router';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AuthService } from 'src/app/service/authentication.service';
 
 @Component({
   selector: 'app-calculator',
@@ -8,6 +10,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class CalculatorComponent implements OnInit {
   @ViewChild("bottom") bottom: ElementRef;
+
+  BASE_SALARY = "1490000"
 
   singleMode = {
     selectedPersons: [],
@@ -25,15 +29,22 @@ export class CalculatorComponent implements OnInit {
     unchoosedFamilies: [],
     selectedChoosed: [],
     selectedUnchoosed: [],
-    resultSingleList: [],
-    displayedListColumns: ['fullname', 'code', 'cmnd', 'salary', 'cost'],
+    resultList: [],
+    displayedListColumns: ['household', 'familyCode', 'count', 'baseSalary', 'cost'],
   }
 
   constructor(
-    private firebase: AngularFirestore
+    private auth: AuthService,
+    private firebase: AngularFirestore,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+
+    if (!this.auth.isAuth()) {
+      this.router.navigate(["/session/login"]);
+    }
+
     this.firebase.collection('inform').valueChanges().subscribe(value => {
       this.singleMode.choosedPersons = [];
       this.singleMode.unchoosedPersons = value.filter(item => item['target'] == '0');
@@ -41,13 +52,38 @@ export class CalculatorComponent implements OnInit {
       this.singleMode.selectedUnchoosed = []
 
       this.familyMode.choosedFamilies = [];
-      this.familyMode.unchoosedFamilies = value.filter(item => item['target'] == '0');
+      this.familyMode.unchoosedFamilies = this.groupFamily(value.filter(item => item['target'] == '1'));
       this.familyMode.selectedChoosed = [];
       this.familyMode.selectedUnchoosed = []
     })
   }
+  groupFamily(listPerson) {
+
+    var groups = [];
+
+    listPerson.forEach(person => {
+
+      var idx = groups.findIndex(item => item.familyCode == person.familyCode);
+      if (idx != -1) {
+        groups[idx]['members'].push(person);
+        groups[idx]['count'] += 1;
+      } else {
+        let data = {
+          familyCode: person.familyCode,
+          members: [],
+          count: 1,
+          household: person.household
+        }
+        data.members.push(person);
+        groups.push(data);
+      }
+    });
+
+    return groups;
+  }
 
   calculatorSingle() {
+    this.singleMode.resultList = [];
     this.singleMode.choosedPersons.forEach((person, index) => {
       this.singleMode.resultList.push({
         ...person,
@@ -62,8 +98,45 @@ export class CalculatorComponent implements OnInit {
     })
   }
 
-  calculatorFamily() {
+  getCostFamily(numberMember) {
 
+    var cost = 0;
+    if (numberMember >= 1) {
+      cost += Number.parseFloat(this.BASE_SALARY) * 4.5 / 100;
+    }
+    if (numberMember >= 2) {
+      cost += Number.parseFloat(this.BASE_SALARY) * (4.5 / 100) * (70 / 100)
+    }
+    if (numberMember >= 3) {
+      cost += Number.parseFloat(this.BASE_SALARY) * (4.5 / 100) * (60 / 100)
+    }
+    if (numberMember >= 4) {
+      cost += Number.parseFloat(this.BASE_SALARY) * (4.5 / 100) * (50 / 100)
+    }
+    if (numberMember >= 5) {
+      for (let i = 0; i <= (numberMember - 5); i++) {
+
+        cost += Number.parseFloat(this.BASE_SALARY) * (4.5 / 100) * (40 / 100)
+      }
+    }
+    return cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  calculatorFamily() {
+    this.familyMode.resultList = [];
+    this.familyMode.choosedFamilies.forEach((family, index) => {
+      this.familyMode.resultList.push({
+        ...family,
+        count: family.count,
+        baseSalary: this.BASE_SALARY.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        cost: this.getCostFamily(family.count)
+      })
+      if (index == this.singleMode.choosedPersons.length - 1) {
+        setTimeout(() => {
+          this.bottom.nativeElement.scrollIntoView();
+        }, 0);
+      }
+    })
   }
 
   singleUnchoosed() {

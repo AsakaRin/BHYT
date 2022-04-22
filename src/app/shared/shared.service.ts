@@ -12,6 +12,8 @@ export class SharedService {
 
   public errorChange = new Subject<string>();
 
+  public notificationChange = new Subject<string>();
+
   constructor(firestore: AngularFirestore) {
     firestore.collection('authentication').valueChanges().subscribe(result => {
       this.authentication = result;
@@ -20,5 +22,9 @@ export class SharedService {
 
   public gettingError(message: string) {
     this.errorChange.next(message);
+  }
+
+  public getNotification(message: string) {
+    this.notificationChange.next(message);
   }
 }

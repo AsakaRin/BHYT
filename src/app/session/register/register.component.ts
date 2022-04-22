@@ -23,6 +23,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.authService.removeSession();
+
     this.registerForm = this.formBuilder.group({
       username: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required, Validators.minLength(8)]]
