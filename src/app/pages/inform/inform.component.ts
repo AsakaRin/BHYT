@@ -525,7 +525,7 @@ export class InformComponent implements OnInit {
 
   onSubmit() {
 
-    this.firestore.collection('inform').add({ ...this.informForm.value, target: this.informForm.controls['target'].value }).then(res => {
+    this.firestore.collection('inform').add({ ...this.informForm.value, target: this.informForm.controls['target'].value, lastPayment: new Date().setMonth(1) }).then(res => {
       this.router.navigate(['/pages/dashboard']);
       this.sharedServcie.getNotification("Thêm thành công");
     });

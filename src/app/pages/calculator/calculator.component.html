@@ -72,6 +72,16 @@
                     <td mat-cell *matCellDef="let element"> {{element.cost}} </td>
                   </ng-container>
 
+                  <ng-container matColumnDef="options">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                        <button (click)="paymentSingle(element['docId'])"
+                          mat-icon-button>
+                        <mat-icon>payment icon</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="singleMode.displayedListColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: singleMode.displayedListColumns;"></tr>
                 </table>
@@ -146,6 +156,18 @@
                   <ng-container matColumnDef="cost">
                     <th mat-header-cell *matHeaderCellDef> Phí BHYT hàng tháng (vnđ) </th>
                     <td mat-cell *matCellDef="let element"> {{element.cost}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="options">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                      <div>
+                        <button (click)="paymentFamily(element)"
+                          mat-icon-button>
+                        <mat-icon>payment icon</mat-icon>
+                      </button>
+                      </div>
+                    </td>
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef="familyMode.displayedListColumns"></tr>

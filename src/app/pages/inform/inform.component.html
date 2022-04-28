@@ -240,7 +240,7 @@
         </form>
         <div fxLayout="row wrap" fxLayoutAlign="end center" class="width_100_percent">
           <button mat-flat-button color="warn" (click)="onCancel()" style="margin-right: 10px; width: 80px">Quay lại</button>
-          <button mat-flat-button color="primary" (click)="onSubmit()" style="width: 80px">Lưu</button>
+          <button mat-flat-button color="primary" (click)="onSubmit()" style="width: 80px" [disabled]="!informForm.valid">Lưu</button>
         </div>
       </mat-card-content>
     </mat-card>

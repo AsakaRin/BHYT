@@ -1,3 +1,4 @@
+import { PaymentComponent } from './payment/payment.component';
 import { CalculatorComponent } from './calculator/calculator.component';
 import { InformComponent } from './inform/inform.component';
 import { DashboardComponent } from './dashboard/dashboard.component';

@@ -16,8 +16,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     SharedModule,
   ],
   providers: [
-    MatDatepickerModule
-  ]
+    MatDatepickerModule,
+  ],
+  entryComponents: [PaymentComponent]
 })
 
 export class PagesModule {

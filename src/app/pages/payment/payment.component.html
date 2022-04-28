@@ -1,1 +1,42 @@
-<p>payment works!</p>
+<mat-horizontal-stepper #stepper>
+  <mat-step label="Thông tin thanh toán">
+    <div class="margin_top_20" *ngIf="data.type == 'singleMode'">
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Họ và tên:</span> {{singlePerson.fullname}}</div>
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Mã bảo hiểm:</span> {{singlePerson.code}}</div>
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Số tiền phải đóng hàng tháng (vnđ):</span> {{singlePerson.cost}}</div>
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Đã đóng đến tháng:</span> {{singlePerson.lastPayment}}</div>
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Số tiền cần phải đóng (vnđ):</span> {{singlePerson.total}}</div>
+    </div>
+    <div class="margin_top_20" *ngIf="data.type == 'familyMode'">
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Chủ hộ:</span> {{singleFamily.household}}</div>
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Mã hộ gia đình:</span> {{singleFamily.familyCode}}</div>
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Số tiền phải đóng hàng tháng (vnđ):</span> {{singleFamily.cost}}</div>
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Đã đóng đến tháng:</span> {{singleFamily.lastPayment}}</div>
+      <div style="margin-top: 10px; font-size: 115%"><span style="font-weight: 500;">Số tiền cần phải đóng (vnđ):</span> {{singleFamily.total}}</div>
+    </div>
+    <div style="float: right; margin-top: 30px;">
+      <button matStepperNext mat-flat-button color="primary">Tiếp tục</button>
+    </div>
+  </mat-step>
+  <mat-step label="Phương thức thanh toán">
+    <div class="margin_top_20">
+      <mat-radio-group aria-label="Chọn phương thức thanh toán">
+        <mat-radio-button checked value="0" style="margin-top: 10px; font-size: 115%"><mat-icon>account_balance</mat-icon><span style="margin-left: 5px">INTERNET BANKING</span></mat-radio-button><br>
+        <mat-radio-button value="1" style="margin-top: 10px; font-size: 115%"><mat-icon>account_balance_wallet</mat-icon><span style="margin-left: 5px">VNPAY/MOMO</span></mat-radio-button><br>
+        <mat-radio-button value="2" style="margin-top: 10px; font-size: 115%"><mat-icon>credit_card</mat-icon><span style="margin-left: 5px">CREDIT CARD</span></mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div style="float: right; margin-top: 30px;">
+      <button matStepperPrevious mat-flat-button color="warn" style="margin-right: 10px">Quay lại</button>
+      <button matStepperNext mat-flat-button color="primary">Tiếp tục</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Thanh toán</ng-template>
+    <p class="margin_top_20">Xác nhận thanh toán</p>
+    <div style="float: right; margin-top: 30px;">
+      <button mat-flat-button color="warn" style="margin-right: 10px" matStepperPrevious>Quay lại</button>
+      <button mat-flat-button color="primary" (click)="payment()">Thanh toán</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

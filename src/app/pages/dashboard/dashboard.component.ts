@@ -75,7 +75,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.firebase.collection('inform').doc(docId).delete().then(res => {
       this.sharedService.getNotification("Xóa thành công");
-      console.log("ERROROR");
     });
   }
 

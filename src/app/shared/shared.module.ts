@@ -13,6 +13,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   imports: [
@@ -30,7 +34,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatNativeDateModule,
     MatDatepickerModule,
     MatTabsModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatStepperModule,
+    CdkStepperModule,
+    MatRadioModule
   ],
   exports: [
     MatCardModule,
@@ -47,7 +55,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatNativeDateModule,
     MatDatepickerModule,
     MatTabsModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatStepperModule,
+    CdkStepperModule,
+    MatRadioModule
   ]
 })
 

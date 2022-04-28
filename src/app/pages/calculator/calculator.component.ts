@@ -1,7 +1,10 @@
+import { SharedService } from './../../shared/shared.service';
+import { PaymentComponent } from './../payment/payment.component';
 import { Router } from '@angular/router';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/service/authentication.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-calculator',
@@ -20,7 +23,7 @@ export class CalculatorComponent implements OnInit {
     selectedChoosed: [],
     selectedUnchoosed: [],
     resultList: [],
-    displayedListColumns: ['fullname', 'code', 'cmnd', 'salary', 'cost'],
+    displayedListColumns: ['fullname', 'code', 'cmnd', 'salary', 'cost', 'options'],
   }
 
   familyMode = {
@@ -30,13 +33,15 @@ export class CalculatorComponent implements OnInit {
     selectedChoosed: [],
     selectedUnchoosed: [],
     resultList: [],
-    displayedListColumns: ['household', 'familyCode', 'count', 'baseSalary', 'cost'],
+    displayedListColumns: ['household', 'familyCode', 'count', 'baseSalary', 'cost', 'options'],
   }
 
   constructor(
     private auth: AuthService,
     private firebase: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
@@ -45,18 +50,30 @@ export class CalculatorComponent implements OnInit {
       this.router.navigate(["/session/login"]);
     }
 
-    this.firebase.collection('inform').valueChanges().subscribe(value => {
+    this.firebase.collection('inform').snapshotChanges().subscribe((reponse: any) => {
+
+      let value = reponse.map(element => {
+        return { ...element.payload.doc.data(), docId: element.payload.doc.id };
+      });
+
       this.singleMode.choosedPersons = [];
-      this.singleMode.unchoosedPersons = value.filter(item => item['target'] == '0');
+      this.singleMode.unchoosedPersons = value.filter(item => item['target'] == '0').map(item => {
+        item['options'] = '';
+        return item;
+      });
       this.singleMode.selectedChoosed = [];
       this.singleMode.selectedUnchoosed = []
 
       this.familyMode.choosedFamilies = [];
-      this.familyMode.unchoosedFamilies = this.groupFamily(value.filter(item => item['target'] == '1'));
+      this.familyMode.unchoosedFamilies = this.groupFamily(value.filter(item => item['target'] == '1')).map(item => {
+        item['options'] = '';
+        return item;
+      });
       this.familyMode.selectedChoosed = [];
       this.familyMode.selectedUnchoosed = []
     })
   }
+
   groupFamily(listPerson) {
 
     var groups = [];
@@ -71,9 +88,12 @@ export class CalculatorComponent implements OnInit {
         let data = {
           familyCode: person.familyCode,
           members: [],
+          docIds: [],
           count: 1,
-          household: person.household
+          household: person.household,
+          lastPayment: person.lastPayment
         }
+        data.docIds.push(person.docId);
         data.members.push(person);
         groups.push(data);
       }
@@ -88,7 +108,8 @@ export class CalculatorComponent implements OnInit {
       this.singleMode.resultList.push({
         ...person,
         salary: person.salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-        cost: (Number.parseFloat(person.salary) * 4.5 / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        cost: (Number.parseFloat(person.salary) * 4.5 / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        options: ''
       })
       if (index == this.singleMode.choosedPersons.length - 1) {
         setTimeout(() => {
@@ -129,7 +150,8 @@ export class CalculatorComponent implements OnInit {
         ...family,
         count: family.count,
         baseSalary: this.BASE_SALARY.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-        cost: this.getCostFamily(family.count)
+        cost: this.getCostFamily(family.count),
+        options: ''
       })
       if (index == this.singleMode.choosedPersons.length - 1) {
         setTimeout(() => {
@@ -254,5 +276,23 @@ export class CalculatorComponent implements OnInit {
       return 'unselected';
     }
     return 'selected';
+  }
+
+  paymentSingle(docId) {
+
+    this.openDialog('singleMode', docId, null);
+  }
+
+  paymentFamily(family) {
+
+    this.openDialog('familyMode', family['docIds'], family);
+  }
+
+  openDialog(type, id, family) {
+    const dialogRef = this.dialog.open(PaymentComponent, {
+      data: {
+        id: id, type: type, family: family
+      }
+    });
   }
 }
