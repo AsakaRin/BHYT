@@ -1,5 +1,4 @@
 import { SharedService } from './../../shared/shared.service';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -22,7 +21,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    // private firebase: AngularFirestore,
     private sharedService: SharedService,
     private auth: AuthService,
     private api: API
@@ -33,19 +31,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (!this.auth.isAuth()) {
       this.router.navigate(["/session/login"]);
     }
-
-    // this.firebase.collection('inform').snapshotChanges().subscribe((value: any) => {
-    //   this.dataSource.data = [];
-    //   value.forEach(element => {
-    //     var date = new Date(element.payload.doc.data().birthday.seconds * 1000);
-    //     var birthday = (+date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
-    //     this.dataSource.data.push({ ...this.formatResponse(element.payload.doc.data()), docId: element.payload.doc.id, birthday: birthday });
-    //   });
-    //   setTimeout(() => {
-
-    //     this.dataSource.paginator = this.paginator;
-    //   }, 0);
-    // })
     this.initData();
   }
 

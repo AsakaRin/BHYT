@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Form } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { API } from 'src/app/api/api.service';
@@ -44,18 +43,6 @@ export class PaymentComponent implements OnInit {
 
     });
     if (this.data.type == 'singleMode') {
-      // this.api.getInformById(this.data.id).subscribe(response => {
-      //   var person = response['item'];
-      //   this.singlePerson = {
-      //     fullname: person['fullname'],
-      //     code: person['code'],
-      //     cost: (Number.parseFloat(person['salary']) * 4.5 / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-      //     lastPayment: new Date(person['lastPayment']).toLocaleDateString(),
-      //     total: ((Number.parseFloat(person['salary']) * 4.5 / 100) *
-      //       (new Date().getMonth() - new Date(person['lastPayment']).getMonth() + 12 * (new Date().getFullYear() - new Date(person['lastPayment']).getFullYear())))
-      //       .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      //   }
-      // });
       this.api.paymentDetail(this.data.id).subscribe(res => {
         this.singlePerson = {
           fullname: res['fullname'],
@@ -68,17 +55,6 @@ export class PaymentComponent implements OnInit {
         }
       })
     } else if (this.data.type == 'familyMode') {
-      // this.singleFamily = {
-      //   household: this.data.family.household,
-      //   familyCode: this.data.family.familyCode,
-      //   count: this.data.family.count,
-      //   cost: this.getCostFamily(this.data.family.count).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-      //   lastPayment: new Date(this.data.family.lastPayment).toLocaleDateString(),
-      //   total: (this.getCostFamily(this.data.family.count) *
-      //     (new Date().getMonth() - new Date(this.data.family.lastPayment).getMonth() + 12 * (new Date().getFullYear() - new Date(this.data.family.lastPayment).getFullYear())))
-      //     .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-
-      // }
       this.api.paymentFamilyDetail(this.data.family.familyCode).subscribe(res => {
         this.singleFamily = {
           household: res['household'],
@@ -96,14 +72,12 @@ export class PaymentComponent implements OnInit {
 
   payment() {
     if (this.data.type == 'singleMode') {
-      // this.firebase.collection('inform').doc(this.data.id).update({ lastPayment: new Date() });
       this.api.updateInform(this.data.id, { lastPayment: new Date() }).subscribe(res => {
         this.sharedService.getNotification("Thanh toán thành công");
         this.closeDialog();
       })
     } else if (this.data.type == 'familyMode') {
       this.data.family.ids.forEach((id, index) => {
-        // this.firebase.collection('inform').doc(id).update({ lastPayment: new Date() });
         this.api.updateInform(id, { lastPayment: new Date() }).subscribe(res => {
           if (this.data.family.ids.length - 1 == index) {
             this.sharedService.getNotification("Thanh toán thành công");

@@ -530,11 +530,6 @@ export class InformComponent implements OnInit {
       this.router.navigate(['/pages/dashboard']);
       this.sharedServcie.getNotification("Thêm thành công");
     })
-
-    // this.firestore.collection('inform').add({ ...this.informForm.value, target: this.informForm.controls['target'].value, lastPayment: new Date(new Date().setMonth(1)) }).then(res => {
-    //   this.router.navigate(['/pages/dashboard']);
-    //   this.sharedServcie.getNotification("Thêm thành công");
-    // });
   }
 
   onCancel() {

@@ -51,29 +51,6 @@ export class CalculatorComponent implements OnInit {
       this.router.navigate(["/session/login"]);
     }
 
-    // this.firebase.collection('inform').snapshotChanges().subscribe((reponse: any) => {
-
-    //   let value = reponse.map(element => {
-    //     return { ...element.payload.doc.data(), docId: element.payload.doc.id };
-    //   });
-
-    //   this.singleMode.choosedPersons = [];
-    //   this.singleMode.unchoosedPersons = value.filter(item => item['target'] == '0').map(item => {
-    //     item['options'] = '';
-    //     return item;
-    //   });
-    //   this.singleMode.selectedChoosed = [];
-    //   this.singleMode.selectedUnchoosed = []
-
-    //   this.familyMode.choosedFamilies = [];
-    //   this.familyMode.unchoosedFamilies = this.groupFamily(value.filter(item => item['target'] == '1')).map(item => {
-    //     item['options'] = '';
-    //     return item;
-    //   });
-    //   this.familyMode.selectedChoosed = [];
-    //   this.familyMode.selectedUnchoosed = []
-    // })
-
     this.api.getAllInforms().subscribe((response: any) => {
       let value = response.items;
       this.singleMode.choosedPersons = [];
@@ -145,20 +122,6 @@ export class CalculatorComponent implements OnInit {
         }
       });
     })
-    // this.singleMode.choosedPersons.forEach((person, index) => {
-    //   this.singleMode.resultList.push({
-    //     ...person,
-    //     salary: person.salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-    //     cost: (Number.parseFloat(person.salary) * 4.5 / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-    //     options: ''
-    //   })
-    //   if (index == this.singleMode.choosedPersons.length - 1) {
-    //     setTimeout(() => {
-    //       this.bottom.nativeElement.scrollIntoView();
-    //     }, 0);
-    //   }
-    // })
-
   }
 
   getCostFamily(numberMember) {
@@ -208,21 +171,6 @@ export class CalculatorComponent implements OnInit {
         }
       })
     })
-    // this.familyMode.choosedFamilies.forEach((family, index) => {
-    //   console.log(family);
-    //   this.familyMode.resultList.push({
-    //     ...family,
-    //     count: family.count,
-    //     baseSalary: this.BASE_SALARY.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-    //     cost: this.getCostFamily(family.count),
-    //     options: ''
-    //   })
-    //   if (index == this.singleMode.choosedPersons.length - 1) {
-    //     setTimeout(() => {
-    //       this.bottom.nativeElement.scrollIntoView();
-    //     }, 0);
-    //   }
-    // })
   }
 
   singleUnchoosed() {

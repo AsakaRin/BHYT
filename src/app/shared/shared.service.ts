@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -14,10 +13,7 @@ export class SharedService {
 
   public notificationChange = new Subject<string>();
 
-  constructor(firestore: AngularFirestore) {
-    firestore.collection('authentication').valueChanges().subscribe(result => {
-      this.authentication = result;
-    });
+  constructor() {
   }
 
   public gettingError(message: string) {
