@@ -59,7 +59,7 @@
 
                   <ng-container matColumnDef="cmnd">
                     <th mat-header-cell *matHeaderCellDef> Số CMND/CCCD/Hộ chiếu </th>
-                    <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.cmnd}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="salary">
@@ -75,7 +75,7 @@
                   <ng-container matColumnDef="options">
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let element">
-                        <button (click)="paymentSingle(element['docId'])"
+                        <button (click)="paymentSingle(element['id'])"
                           mat-icon-button>
                         <mat-icon>payment icon</mat-icon>
                       </button>

@@ -5,6 +5,7 @@ import { SharedService } from './../../shared/shared.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { API } from 'src/app/api/api.service';
 
 @Component({
   selector: 'app-inform',
@@ -464,10 +465,10 @@ export class InformComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private firestore: AngularFirestore,
     private sharedServcie: SharedService,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private api: API
   ) { }
 
   ngOnInit(): void {
@@ -525,10 +526,15 @@ export class InformComponent implements OnInit {
 
   onSubmit() {
 
-    this.firestore.collection('inform').add({ ...this.informForm.value, target: this.informForm.controls['target'].value, lastPayment: new Date().setMonth(1) }).then(res => {
+    this.api.createInform({ ...this.informForm.value, target: this.informForm.controls['target'].value, lastPayment: new Date(new Date().setMonth(1)) }).subscribe(res => {
       this.router.navigate(['/pages/dashboard']);
       this.sharedServcie.getNotification("Thêm thành công");
-    });
+    })
+
+    // this.firestore.collection('inform').add({ ...this.informForm.value, target: this.informForm.controls['target'].value, lastPayment: new Date(new Date().setMonth(1)) }).then(res => {
+    //   this.router.navigate(['/pages/dashboard']);
+    //   this.sharedServcie.getNotification("Thêm thành công");
+    // });
   }
 
   onCancel() {

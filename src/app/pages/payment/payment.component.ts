@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Form } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { API } from 'src/app/api/api.service';
 import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
@@ -33,52 +34,84 @@ export class PaymentComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private firebase: AngularFirestore,
     private sharedService: SharedService,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private api: API) { }
 
   ngOnInit(): void {
     this.firstFormGroup = this.formBuilder.group({
 
     });
     if (this.data.type == 'singleMode') {
-      this.firebase.collection('inform').doc(this.data.id).valueChanges().subscribe(person => {
+      // this.api.getInformById(this.data.id).subscribe(response => {
+      //   var person = response['item'];
+      //   this.singlePerson = {
+      //     fullname: person['fullname'],
+      //     code: person['code'],
+      //     cost: (Number.parseFloat(person['salary']) * 4.5 / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+      //     lastPayment: new Date(person['lastPayment']).toLocaleDateString(),
+      //     total: ((Number.parseFloat(person['salary']) * 4.5 / 100) *
+      //       (new Date().getMonth() - new Date(person['lastPayment']).getMonth() + 12 * (new Date().getFullYear() - new Date(person['lastPayment']).getFullYear())))
+      //       .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      //   }
+      // });
+      this.api.paymentDetail(this.data.id).subscribe(res => {
         this.singlePerson = {
-          fullname: person['fullname'],
-          code: person['code'],
-          cost: (Number.parseFloat(person['salary']) * 4.5 / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-          lastPayment: new Date(+person['lastPayment']['seconds'] * 1000).toLocaleDateString(),
-          total: ((Number.parseFloat(person['salary']) * 4.5 / 100) *
-            (new Date().getMonth() - new Date(+person['lastPayment']['seconds'] * 1000).getMonth() + 12 * (new Date().getFullYear() - new Date(+person['lastPayment']['seconds'] * 1000).getFullYear())))
+          fullname: res['fullname'],
+          code: res['code'],
+          cost: (+res['cost']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          lastPayment: new Date(res['lastPayment']).toLocaleDateString(),
+          total: ((Number.parseFloat(res['salary']) * 4.5 / 100) *
+            (new Date().getMonth() - new Date(res['lastPayment']).getMonth() + 12 * (new Date().getFullYear() - new Date(res['lastPayment']).getFullYear())))
             .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         }
-      });
+      })
     } else if (this.data.type == 'familyMode') {
-      this.singleFamily = {
-        household: this.data.family.household,
-        familyCode: this.data.family.familyCode,
-        count: this.data.family.count,
-        cost: this.getCostFamily(this.data.family.count).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-        lastPayment: new Date(+this.data.family.lastPayment['seconds'] * 1000).toLocaleDateString(),
-        total: (this.getCostFamily(this.data.family.count) *
-          (new Date().getMonth() - new Date(+this.data.family.lastPayment['seconds'] * 1000).getMonth() + 12 * (new Date().getFullYear() - new Date(+this.data.family.lastPayment['seconds'] * 1000).getFullYear())))
-          .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+      // this.singleFamily = {
+      //   household: this.data.family.household,
+      //   familyCode: this.data.family.familyCode,
+      //   count: this.data.family.count,
+      //   cost: this.getCostFamily(this.data.family.count).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+      //   lastPayment: new Date(this.data.family.lastPayment).toLocaleDateString(),
+      //   total: (this.getCostFamily(this.data.family.count) *
+      //     (new Date().getMonth() - new Date(this.data.family.lastPayment).getMonth() + 12 * (new Date().getFullYear() - new Date(this.data.family.lastPayment).getFullYear())))
+      //     .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
 
-      }
+      // }
+      this.api.paymentFamilyDetail(this.data.family.familyCode).subscribe(res => {
+        this.singleFamily = {
+          household: res['household'],
+          familyCode: res['familyCode'],
+          count: res['count'],
+          cost: (+res['cost']).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          lastPayment: new Date(res['lastPayment']).toLocaleDateString(),
+          total: (+this.getCostFamily(res['count']) *
+            (new Date().getMonth() - new Date(res['lastPayment']).getMonth() + 12 * (new Date().getFullYear() - new Date(res['lastPayment']).getFullYear())))
+            .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        }
+      })
     }
   }
 
   payment() {
     if (this.data.type == 'singleMode') {
-      this.firebase.collection('inform').doc(this.data.id).update({ lastPayment: new Date() });
+      // this.firebase.collection('inform').doc(this.data.id).update({ lastPayment: new Date() });
+      this.api.updateInform(this.data.id, { lastPayment: new Date() }).subscribe(res => {
+        this.sharedService.getNotification("Thanh toán thành công");
+        this.closeDialog();
+      })
     } else if (this.data.type == 'familyMode') {
-      this.data.family.docIds.forEach(id => {
-        this.firebase.collection('inform').doc(id).update({ lastPayment: new Date() });
+      this.data.family.ids.forEach((id, index) => {
+        // this.firebase.collection('inform').doc(id).update({ lastPayment: new Date() });
+        this.api.updateInform(id, { lastPayment: new Date() }).subscribe(res => {
+          if (this.data.family.ids.length - 1 == index) {
+            this.sharedService.getNotification("Thanh toán thành công");
+            this.closeDialog();
+          }
+        })
       })
     }
-    this.sharedService.getNotification("Thanh toán thành công");
-    this.closeDialog()
   }
 
   closeDialog() {

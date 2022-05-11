@@ -5,6 +5,7 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/service/authentication.service';
 import { MatDialog } from '@angular/material/dialog';
+import { API } from 'src/app/api/api.service';
 
 @Component({
   selector: 'app-calculator',
@@ -38,10 +39,10 @@ export class CalculatorComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private firebase: AngularFirestore,
     private router: Router,
     private dialog: MatDialog,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private api: API
   ) { }
 
   ngOnInit(): void {
@@ -50,12 +51,31 @@ export class CalculatorComponent implements OnInit {
       this.router.navigate(["/session/login"]);
     }
 
-    this.firebase.collection('inform').snapshotChanges().subscribe((reponse: any) => {
+    // this.firebase.collection('inform').snapshotChanges().subscribe((reponse: any) => {
 
-      let value = reponse.map(element => {
-        return { ...element.payload.doc.data(), docId: element.payload.doc.id };
-      });
+    //   let value = reponse.map(element => {
+    //     return { ...element.payload.doc.data(), docId: element.payload.doc.id };
+    //   });
 
+    //   this.singleMode.choosedPersons = [];
+    //   this.singleMode.unchoosedPersons = value.filter(item => item['target'] == '0').map(item => {
+    //     item['options'] = '';
+    //     return item;
+    //   });
+    //   this.singleMode.selectedChoosed = [];
+    //   this.singleMode.selectedUnchoosed = []
+
+    //   this.familyMode.choosedFamilies = [];
+    //   this.familyMode.unchoosedFamilies = this.groupFamily(value.filter(item => item['target'] == '1')).map(item => {
+    //     item['options'] = '';
+    //     return item;
+    //   });
+    //   this.familyMode.selectedChoosed = [];
+    //   this.familyMode.selectedUnchoosed = []
+    // })
+
+    this.api.getAllInforms().subscribe((response: any) => {
+      let value = response.items;
       this.singleMode.choosedPersons = [];
       this.singleMode.unchoosedPersons = value.filter(item => item['target'] == '0').map(item => {
         item['options'] = '';
@@ -88,12 +108,12 @@ export class CalculatorComponent implements OnInit {
         let data = {
           familyCode: person.familyCode,
           members: [],
-          docIds: [],
+          ids: [],
           count: 1,
           household: person.household,
           lastPayment: person.lastPayment
         }
-        data.docIds.push(person.docId);
+        data.ids.push(person.id);
         data.members.push(person);
         groups.push(data);
       }
@@ -104,19 +124,41 @@ export class CalculatorComponent implements OnInit {
 
   calculatorSingle() {
     this.singleMode.resultList = [];
-    this.singleMode.choosedPersons.forEach((person, index) => {
-      this.singleMode.resultList.push({
-        ...person,
-        salary: person.salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-        cost: (Number.parseFloat(person.salary) * 4.5 / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-        options: ''
-      })
-      if (index == this.singleMode.choosedPersons.length - 1) {
-        setTimeout(() => {
-          this.bottom.nativeElement.scrollIntoView();
-        }, 0);
-      }
+    var ids = [];
+    this.singleMode.choosedPersons.forEach(person => {
+      ids.push(person.id);
     })
+    this.api.calculatorSingle(ids).subscribe((res: any) => {
+
+      res.forEach((person, index) => {
+
+        this.singleMode.resultList.push({
+          ...person,
+          salary: (+person.salary).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          cost: (+person.cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          options: person.option
+        })
+        if (index == this.singleMode.choosedPersons.length - 1) {
+          setTimeout(() => {
+            this.bottom.nativeElement.scrollIntoView();
+          }, 0);
+        }
+      });
+    })
+    // this.singleMode.choosedPersons.forEach((person, index) => {
+    //   this.singleMode.resultList.push({
+    //     ...person,
+    //     salary: person.salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    //     cost: (Number.parseFloat(person.salary) * 4.5 / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    //     options: ''
+    //   })
+    //   if (index == this.singleMode.choosedPersons.length - 1) {
+    //     setTimeout(() => {
+    //       this.bottom.nativeElement.scrollIntoView();
+    //     }, 0);
+    //   }
+    // })
+
   }
 
   getCostFamily(numberMember) {
@@ -145,20 +187,42 @@ export class CalculatorComponent implements OnInit {
 
   calculatorFamily() {
     this.familyMode.resultList = [];
+    var ids = [];
     this.familyMode.choosedFamilies.forEach((family, index) => {
-      this.familyMode.resultList.push({
-        ...family,
-        count: family.count,
-        baseSalary: this.BASE_SALARY.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-        cost: this.getCostFamily(family.count),
-        options: ''
-      })
-      if (index == this.singleMode.choosedPersons.length - 1) {
-        setTimeout(() => {
-          this.bottom.nativeElement.scrollIntoView();
-        }, 0);
-      }
+      ids.push(family.familyCode);
     })
+    this.api.calculatorFamily(ids).subscribe((res: any) => {
+      res.forEach((family, index) => {
+
+        this.familyMode.resultList.push({
+          ...family,
+          count: family.count,
+          baseSalary: (+family.baseSalary).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          cost: (+family.cost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          options: ''
+        })
+        if (index == this.singleMode.choosedPersons.length - 1) {
+          setTimeout(() => {
+            this.bottom.nativeElement.scrollIntoView();
+          }, 0);
+        }
+      })
+    })
+    // this.familyMode.choosedFamilies.forEach((family, index) => {
+    //   console.log(family);
+    //   this.familyMode.resultList.push({
+    //     ...family,
+    //     count: family.count,
+    //     baseSalary: this.BASE_SALARY.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    //     cost: this.getCostFamily(family.count),
+    //     options: ''
+    //   })
+    //   if (index == this.singleMode.choosedPersons.length - 1) {
+    //     setTimeout(() => {
+    //       this.bottom.nativeElement.scrollIntoView();
+    //     }, 0);
+    //   }
+    // })
   }
 
   singleUnchoosed() {
@@ -278,14 +342,15 @@ export class CalculatorComponent implements OnInit {
     return 'selected';
   }
 
-  paymentSingle(docId) {
+  paymentSingle(id) {
 
-    this.openDialog('singleMode', docId, null);
+    this.openDialog('singleMode', id, null);
   }
 
   paymentFamily(family) {
 
-    this.openDialog('familyMode', family['docIds'], family);
+    console.log(family);
+    this.openDialog('familyMode', family['ids'], family);
   }
 
   openDialog(type, id, family) {
