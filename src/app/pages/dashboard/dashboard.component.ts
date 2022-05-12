@@ -85,6 +85,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   editItem(id) {
 
-    alert("Tính năng chưa hoàn thiện");
+    this.router.navigate(["pages/inform/update/" + id]);
   }
 }

@@ -1,0 +1,249 @@
+<div id="inform_box">
+
+  <app-nav-bar></app-nav-bar>
+
+  <div class="content margin_top_20">
+    <mat-card class="margin_center">
+      <mat-card-title class="text_align_center">Khai báo bảo hiểm y tế</mat-card-title>
+      <mat-card-content>
+        <form class="form" [formGroup]="informForm">
+          <div class="title_text">Thông tin chung</div>
+          <div><mat-divider></mat-divider></div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Loại BHYT</mat-label>
+                <mat-select formControlName="type" required>
+                  <mat-option value="0">Bắt buộc</mat-option>
+                  <mat-option value="1">Tự nguyện</mat-option>
+                </mat-select>
+                <mat-error *ngIf="informForm.controls['type'].touched && informForm.controls['type'].hasError('required')">
+                  Loại BHYT là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Đối tượng tham gia</mat-label>
+                <mat-select required formControlName="target">
+                  <mat-option value="0">Cá nhân</mat-option>
+                  <mat-option value="1">Hộ gia đình</mat-option>
+                </mat-select>
+                <mat-error *ngIf="informForm.controls['target'].touched && informForm.controls['target'].hasError('required')">
+                  Đối tượng tham gia là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Tên chủ hộ</mat-label>
+                <input matInput formControlName="hostName" autofocus autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Họ và tên người tham gia BHYT (viết chữ hoa)</mat-label>
+                <input matInput required formControlName="fullname" autocomplete="off" (keypress)="onlyCapitalized($event, 'fullname')">
+                <mat-error *ngIf="informForm.controls['fullname'].touched && informForm.controls['fullname'].hasError('required')">
+                  Họ tên người tham gia là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Số thẻ BHYT</mat-label>
+                <input matInput required formControlName="code" autocomplete="off" (keypress)="onlyNumber($event)">
+                <mat-error *ngIf="informForm.controls['code'].touched && informForm.controls['code'].hasError('required')">
+                  Số thẻ BHYT là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Số CMND/CCCD/Hộ chiếu</mat-label>
+                <input matInput required formControlName="cmnd" autocomplete="off" (keypress)="onlyNumber($event)">
+                <mat-error *ngIf="informForm.controls['cmnd'].touched && informForm.controls['cmnd'].hasError('required')">
+                  CMND/CCCD/Hộ chiếu là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <!-- <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Ngày sinh</mat-label>
+                <input matInput required formControlName="birthday">
+                <mat-error *ngIf="informForm.controls['birthday'].touched && informForm.controls['birthday'].hasError('required')">
+                  Ngày sinh là bắt buộc
+                </mat-error>
+              </mat-form-field> -->
+
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Ngày sinh</mat-label>
+                <input matInput [matDatepicker]="dp3" [disabled]="true" required formControlName="birthday" [max]="maxDate" style="color: rgba(0, 0, 0, 0.87) !important;">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+                <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+                <mat-error *ngIf="informForm.controls['birthday'].touched && informForm.controls['birthday'].hasError('required')">
+                  Ngày sinh là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Giới tính</mat-label>
+                <mat-select required formControlName="gender">
+                  <mat-option value="0">Nam</mat-option>
+                  <mat-option value="1">Nữ</mat-option>
+                </mat-select>
+                <mat-error *ngIf="informForm.controls['gender'].touched && informForm.controls['gender'].hasError('required')">
+                  Giới tính là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Quốc tịch</mat-label>
+                <mat-select required formControlName="nation">
+                  <mat-option *ngFor="let nation of nationList" [value]="nation">{{nation}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="informForm.controls['nation'].touched && informForm.controls['nation'].hasError('required')">
+                  Quốc tịch là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Dân tộc</mat-label>
+                <input matInput formControlName="ethnicity" autocomplete="off">
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Mã vùng</mat-label>
+                <mat-select required formControlName="geocode">
+                  <mat-option *ngFor="let code of phoneCodeList" [value]="code">{{code}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="informForm.controls['geocode'].touched && informForm.controls['geocode'].hasError('required')">
+                  Mã vùng là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Số điện thoại</mat-label>
+                <input matInput required formControlName="phoneNumber" autocomplete="off" (keypress)="onlyNumber($event)">
+                <mat-error *ngIf="informForm.controls['phoneNumber'].touched && informForm.controls['phoneNumber'].hasError('required')">
+                  Số điện thoại là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Xã</mat-label>
+                <input matInput formControlName="street" autocomplete="off">
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Quận/Huyện</mat-label>
+                <input matInput formControlName="district" autocomplete="off">
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Tỉnh/Thành Phố</mat-label>
+                <input matInput formControlName="city" autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Nơi đăng ký khám chữa bênh ban đầu</mat-label>
+                <input matInput required formControlName="dkcb" autocomplete="off">
+                <mat-error *ngIf="informForm.controls['dkcb'].touched && informForm.controls['dkcb'].hasError('required')">
+                  Nơi đăng ký khám chữa bệnh ban đầu là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Họ tên cha/mẹ/giám hộ(đối với trẻ dưới 6 tuổi)</mat-label>
+                <input matInput formControlName="guardians" autocomplete="off">
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Thu nhập cá nhân (vnđ)</mat-label>
+                <input matInput required formControlName="salary" autocomplete="off" (keypress)="onlyNumber($event)">
+                <mat-error *ngIf="informForm.controls['salary'].touched && informForm.controls['salary'].hasError('required')">
+                  Thu nhập cá nhân
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="title_text">Phụ lục thành viên hộ gia đình <span>(áp dụng với những người đăng ký bảo hiểm theo hộ gia đình)</span></div>
+          <div><mat-divider></mat-divider></div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Mã hộ gia đình</mat-label>
+                <input matInput autocomplete="off" formControlName="familyCode" [required]="isRequired('familyCode')">
+                <mat-error *ngIf="informForm.controls['familyCode'].touched && informForm.controls['familyCode'].hasError('required')">
+                  Mã hộ gia đình là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Họ và tên chủ hộ</mat-label>
+                <input matInput formControlName="household" autocomplete="off" [required]="isRequired('household')">
+                <mat-error *ngIf="informForm.controls['household'].touched && informForm.controls['household'].hasError('required')">
+                  Họ và tên chủ hộ là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Số sổ hộ khẩu (số sổ tạm trú)</mat-label>
+                <input matInput autocomplete="off" formControlName="familyCode">
+              </mat-form-field>
+            </div> -->
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Điện thoại liên hệ</mat-label>
+                <input matInput autocomplete="off" formControlName="phoneContact" [required]="isRequired('phoneContact')">
+                <mat-error *ngIf="informForm.controls['phoneContact'].touched && informForm.controls['phoneContact'].hasError('required')">
+                  Điện thoại liên hệ là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="2%">
+            <div fxFlex.gt-sm="32" fxFlex.gt-xs="32" fxFlex="100">
+              <mat-form-field class="width_100_percent" appearance="outline">
+                <mat-label>Địa chỉ theo sổ hộ khẩu (sổ tạm trú)</mat-label>
+                <input matInput autocomplete="off" formControlName="addressHousehold" [required]="isRequired('addressHousehold')">
+                <mat-error *ngIf="informForm.controls['addressHousehold'].touched && informForm.controls['familyCode'].hasError('addressHousehold')">
+                  Địa chỉ theo hộ khẩu là bắt buộc
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+        <div fxLayout="row wrap" fxLayoutAlign="end center" class="width_100_percent">
+          <button mat-flat-button color="warn" (click)="onCancel()" style="margin-right: 10px; width: 80px">Quay lại</button>
+          <button mat-flat-button color="primary" (click)="onSubmit()" style="width: 80px" [disabled]="!informForm.valid">Lưu</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>

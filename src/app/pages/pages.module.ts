@@ -8,9 +8,10 @@ import { CalculatorComponent } from './calculator/calculator.component';
 import { PaymentComponent } from './payment/payment.component';
 import { InformComponent } from './inform/inform.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { UpdateComponent } from './update/update.component';
 
 @NgModule({
-  declarations: [DashboardComponent, NavBarComponent, CalculatorComponent, PaymentComponent, InformComponent],
+  declarations: [DashboardComponent, NavBarComponent, CalculatorComponent, PaymentComponent, InformComponent, UpdateComponent],
   imports: [
     RouterModule.forChild(PagesRoutes),
     SharedModule,

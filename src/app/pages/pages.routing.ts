@@ -1,3 +1,4 @@
+import { UpdateComponent } from './update/update.component';
 import { PaymentComponent } from './payment/payment.component';
 import { CalculatorComponent } from './calculator/calculator.component';
 import { InformComponent } from './inform/inform.component';
@@ -17,9 +18,13 @@ export const PagesRoutes: Routes = [
         component: InformComponent
       },
       {
+        path: 'inform/update/:id',
+        component: UpdateComponent
+      },
+      {
         path: 'calculator',
         component: CalculatorComponent
-      }
+      },
     ]
   }
 ]
